@@ -229,7 +229,7 @@ function App() {
                         return (
                           <div className={'form-group inline'} key={`company_${index}`}>
                             <div className={'form-group inline'}>
-                              <input placeholder={'姓名'} name={`company.${index}.name`} type="text" {...registerCompany(`company.${index}.name`, {required: true})} className={`${errorsCompany.company && errorsCompany.company[index] && errorsCompany.company[index].name ? 'invalid' : ''}`} />
+                              <input placeholder={'姓名(全名)'} name={`company.${index}.name`} type="text" {...registerCompany(`company.${index}.name`, {required: true})} className={`${errorsCompany.company && errorsCompany.company[index] && errorsCompany.company[index].name ? 'invalid' : ''}`} />
                               <input placeholder={'電話'} name={`company.${index}.phone`} type="tel" {...registerCompany(`company.${index}.phone`, {required: true})} className={`${errorsCompany.company && errorsCompany.company[index] && errorsCompany.company[index].phone ? 'invalid' : ''}`} />
                               <div className={'remove-button'} onClick={() => {handleRemoveCompany(index)}}><img src={RemoveIcon}/></div>
                             </div>
