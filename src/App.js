@@ -218,7 +218,7 @@ function App() {
               <form id={'companyForm'} className={'form'} onSubmit={handleSubmitCompany(onSubmitCompany)}>
                 <div className={'form-group inline'}>
                     <div className={'label'}>同行親友</div>
-                    <Button color={'secondary'} type={'button'} onClick={handleAddCompany}><img src={PlusIcon} /></Button>
+                    <Button className="noselect" color={'secondary'} type={'button'} onClick={handleAddCompany}><img src={PlusIcon} /></Button>
                 </div>
                 {
                   errorsCompany.company && <div className={'error'}>請輸入同行人資料</div>
@@ -352,7 +352,7 @@ function App() {
       {
         page === 1 &&
           <div className='bottom-buttons'>
-            <Button className="bottom-button" size={'lg'} color={'primary'} onClick={handleBack} outline><img src={BackIcon} /></Button>
+            <Button className="bottom-button noselect" size={'lg'} color={'primary'} onClick={handleBack} outline><img src={BackIcon} /></Button>
             <Button className="bottom-button" form={'companyForm'} type={'submit'} size={'lg'} color={'primary'}>{
               companies.filter((index) => index !== null).length > 0 ? '下一步' : '沒有，下一步'
             }</Button>
@@ -361,7 +361,7 @@ function App() {
       {
         page === 2 &&
           <div className='bottom-buttons'>
-            <Button className="bottom-button" size={'lg'} color={'primary'} onClick={handleBack} outline><img src={BackIcon} /></Button>
+            <Button className="bottom-button noselect" size={'lg'} color={'primary'} onClick={handleBack} outline><img src={BackIcon} /></Button>
             <Button className="bottom-button" form={'workshopForm'} type={'submit'} size={'lg'} color={'primary'}>{
               loading ?
                 <div><img className={'loading spinner'} src={BellIcon} /></div> :
