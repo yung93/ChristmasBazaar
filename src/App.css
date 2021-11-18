@@ -187,6 +187,11 @@ input:-webkit-autofill:active {
     color: white !important;
 }
 
+.btn-outline-primary:hover {
+    border-color: white !important;
+    background-color: transparent !important;
+}
+
 .bottom-buttons {
     display: flex;
     width: 100%;
