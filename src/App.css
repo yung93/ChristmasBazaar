@@ -3,6 +3,7 @@ html, body, #root {
     height: 100%;
     margin: 0;
     padding: 0;
+    background: cadetblue;
 }
 .header {
     font-size: 20px;
@@ -12,14 +13,13 @@ html, body, #root {
 .app {
     text-align: center;
     background: cadetblue;
-    padding: 5vw;
     display: flex;
     flex-direction: column;
     align-content: center;
     justify-content: center;
     color: #4a4a4a;
     height: 100%;
-    padding-bottom: 50px;
+    padding: 5vw 5vw 50px;
 }
 
 form {
