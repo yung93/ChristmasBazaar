@@ -186,7 +186,7 @@ function App() {
                   {
                     errors.name && <div className={'error'}>請輸入姓名</div>
                   }
-                  <input id="name" name="name" type="text" placeholder={'e.g. Siu Oi Ping'} {...register('name', {required: true})}/>
+                  <input id="name" name="name" type="text" placeholder={'e.g. Chan Siu Ming'} {...register('name', {required: true})}/>
                 </div>
                 <div className="form-group">
                   <div className="label" htmlFor="phone">電話</div>
