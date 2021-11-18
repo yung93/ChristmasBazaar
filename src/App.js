@@ -182,11 +182,11 @@ function App() {
               <form id="infoForm" className="form" onSubmit={handleSubmit(onSubmitInfo)}>
                 <div className={'header'}>{`歡迎參與聖誕市集(DAY${day})`}</div>
                 <div className="form-group">
-                  <div className="label" htmlFor="name">姓名</div>
+                  <div className="label" htmlFor="name">姓名(全名)</div>
                   {
                     errors.name && <div className={'error'}>請輸入姓名</div>
                   }
-                  <input id="name" name="name" type="text" {...register('name', {required: true})}/>
+                  <input id="name" name="name" type="text" placeholder={'e.g. Siu Oi Ping'} {...register('name', {required: true})}/>
                 </div>
                 <div className="form-group">
                   <div className="label" htmlFor="phone">電話</div>
