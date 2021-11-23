@@ -6,7 +6,7 @@ html, body, #root {
     background: cadetblue;
 }
 .header {
-    font-size: 20px;
+    font-size: 30px;
     font-weight: bolder;
     margin-bottom: 20px;
 }
@@ -22,7 +22,7 @@ html, body, #root {
     padding: 5vw 5vw 50px;
 }
 
-form {
+.form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -133,8 +133,28 @@ input:-webkit-autofill:active {
     font-size: 20px !important;
 }
 
-.form-group:not(:last-child) {
+.form-group{
     margin-bottom: 20px;
+}
+
+.check-box {
+    padding: 10px;
+    border: 1px solid #a4a4a4;
+    border-radius: 10px;
+    min-width: 100px;
+    margin: 5px;
+    cursor: pointer;
+    display: flex;
+}
+
+.check-box img {
+    margin-right: 5px;
+}
+
+.check-box:active, .check-box.active {
+    border: 2px solid cadetblue;
+    color: cadetblue;
+    font-weight: bold;
 }
 
 .carousel {
@@ -154,12 +174,13 @@ input:-webkit-autofill:active {
     height: 100%;
 }
 
-.content>div {
+.page {
     padding: 50px 5vw;
     flex: 0;
     display: flex;
     flex-direction: column;
     overflow: scroll;
+    align-items: center;
 }
 
 .btn {
@@ -349,4 +370,16 @@ input:-webkit-autofill:active {
         -webkit-transform: rotate(0deg);
         transform:rotate(0deg);
     }
+}
+
+.qr-code-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+}
+
+.id{
+    margin-top: 5px;
+    font-size: 10px;
 }
