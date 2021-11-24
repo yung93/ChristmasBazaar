@@ -53,7 +53,6 @@ const dateOptions = [
 ]
 
 function App() {
-  const carouselRef = useRef(null);
   const [width, setWidth] = useState(window.innerWidth * 0.9);
   const [page, setPage] = useState(0);
   const [pages, setPages] = useState(['dates', 'info', 'summary']);
@@ -64,6 +63,7 @@ function App() {
   const [timetable, setTimeTable] = useState({day1: {}, day2: {}});
   const [id, setId] = useState(null);
   const [error, setError] = useState(null);
+  const carouselRef = useRef(null);
 
   const { handleSubmit, control, getValues, register, unregister, formState: {errors}, watch, reset } = useForm();
   const { handleSubmit: handleSubmitDate, control: controlDate, formState: {errors: errorsDate}, reset: resetDate } = useForm();
@@ -219,10 +219,12 @@ function App() {
 
   const handleBack = useCallback(() => {
     setPage(page-1);
+    carouselRef.current.scrollTop = 0;
   }, [page]);
 
   const handleNext = useCallback(() => {
     setPage(page+1);
+    carouselRef.current.scrollTop = 0;
   }, [page]);
 
   const handleTimeSelect = useCallback((date, workshop, timeslot, onChange) => {
@@ -521,7 +523,7 @@ function App() {
             <Button className="bottom-button noselect" size={'lg'} color={'primary'} onClick={handleBack} outline><img src={BackIcon} /></Button>
             {
               page === pages.length - 2 ?
-                <Button key="submitButton" className="bottom-button" form={`workshopForm`} type={'submit'} size={'lg'} color={'primary'}>
+                <Button key="submitButton" className="bottom-button" form={`workshopForm`} type={'submit'} size={'lg'} color={'primary'} disabled={loading}>
                   {
                     loading ?
                       <div><img className={'loading spinner'} src={BellIcon} /></div> :
