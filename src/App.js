@@ -43,8 +43,8 @@ const churchOptions = [
   {label: '其他', value: '其他'}
 ]
 const days = {
-  day1: 'Day 1: 12月25日（六）',
-  day2: 'Day 2: 12月26日（日）',
+  day1: 'Day 1: 12月25日 (六)',
+  day2: 'Day 2: 12月26日 (日)',
 };
 
 const dateOptions = [
@@ -63,6 +63,7 @@ function App() {
   const [workshopOptions, setWorkshopOptions] = useState({day1: {}, day2: {}});
   const [timetable, setTimeTable] = useState({day1: {}, day2: {}});
   const [id, setId] = useState(null);
+  const [error, setError] = useState(null);
 
   const { handleSubmit, control, getValues, register, unregister, formState: {errors}, watch, reset } = useForm();
   const { handleSubmit: handleSubmitDate, control: controlDate, formState: {errors: errorsDate}, reset: resetDate } = useForm();
@@ -202,10 +203,18 @@ function App() {
         return await sheet.addRow(row);
       }
     });
-    await Promise.all(promises);
-    await handleSendEmail(id);
-    handleNext();
-    setLoading(false);
+    try {
+      await Promise.all(promises);
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+    }
+    try {
+      await handleSendEmail(id);
+    } finally {
+      handleNext();
+      setLoading(false);
+    }
   }, [page, info, dates]);
 
   const handleBack = useCallback(() => {
@@ -233,13 +242,14 @@ function App() {
   }, [timetable]);
 
   const handleReset = useCallback(() => {
-    reset();
-    resetDate();
+    reset({promotion: true});
+    resetDate({dates: []});
     resetWorkshop();
     setDates([]);
     setInfo({});
     setTimeTable({day1: {}, day2: {}});
     setPage(0);
+    setError(null);
     setId(null);
   }, [reset, resetDate, resetWorkshop]);
 
@@ -279,9 +289,9 @@ function App() {
                 <div className="form-group">
                   <div className="label" htmlFor="email">電郵地址</div>
                   {
-                    errors.email && <div className={'error'}>請輸入電郵地址</div>
+                    errors.email && <div className={'error'}>請輸入有效電郵地址</div>
                   }
-                  <input id="email" name="email" type="email" {...register('email', {required: true})}/>
+                  <input id="email" name="email" type="email" {...register('email', {required: true, pattern: /^\S+@\S+$/i})}/>
                 </div>
                 <div className="form-group">
                   <div className="label" htmlFor="belongsTo">屬於哪個群體？</div>
@@ -475,14 +485,20 @@ function App() {
             </form>
             {/*Page summary*/}
             <div className={'page'} style={{ minWidth: width }}>
-                <div className={'label'}>{`多謝參與，${info.name} :)`}</div>
-                <div className={'label'}>{'請查收確認電郵，活動當日請向場內工作人員出示以下二維碼。'}</div>
-                <div className={'qr-code-container'}>
-                  { id && <QRCode id={'QRCode'} value={id} bgColor={'#fff6f1'} fgColor={'#4a4a4a'} size={Math.min(250, width - 50)} /> }
-                  {
-                    <div className={'id'}>{id}</div>
-                  }
-                </div>
+              {
+                error ?
+                  <div className={'label'}>{`出現錯誤，未能完成登記`}</div> :
+                  <div>
+                    <div className={'label'}>{`多謝參與，${info.name} :)`}</div>
+                    <div className={'label'}>{'請查收確認電郵，活動當日請向場內工作人員出示以下二維碼。'}</div>
+                    <div className={'qr-code-container'}>
+                      { id && <QRCode id={'QRCode'} value={id} bgColor={'#fff6f1'} fgColor={'#4a4a4a'} size={Math.min(250, width - 50)} /> }
+                      {
+                        <div className={'id'}>{id}</div>
+                      }
+                    </div>
+                  </div>
+              }
             </div>
           </div>
         </div>
@@ -527,7 +543,9 @@ function App() {
       {
         pages[page] === 'summary' &&
           <div className='bottom-buttons'>
-            <Button className="bottom-button" type={'button'} size={'lg'} color={'primary'} onClick={handleReset}>下一個登記</Button>
+            <Button className="bottom-button" type={'button'} size={'lg'} color={'primary'} onClick={handleReset}>
+              { error ? '重新登記' : '下一個登記' }
+            </Button>
           </div>
       }
     </div>
