@@ -4,26 +4,24 @@ import {useState, useCallback} from "react";
 
 const Selector = (props) => {
   const {options, control, name, multiple, onSelect, required, full} = props;
-  const [selected, setSelected] = useState([]);
 
-  const handleSelect = useCallback((selectedValue, onChange) => {
+  const handleSelect = useCallback((selected, selectedValue, onChange) => {
     let temp = multiple ? [...selected] : [];
     if (selected.includes(selectedValue)) {
         temp = selected.filter((value) => value !== selectedValue);
     } else {
       temp.push(selectedValue);
     }
-    setSelected(temp);
     onChange(temp);
     onSelect && onSelect(temp);
-  }, [multiple, selected]);
+  }, [multiple]);
 
   return (
     <Controller
       control={control}
       name={name}
       render={({
-                 field: { onChange, onBlur, value, name, ref },
+                 field: { onChange, onBlur, value: selected, name, ref },
                  fieldState: { invalid, isTouched, isDirty, error },
                  formState,
                }) => (
@@ -37,7 +35,7 @@ const Selector = (props) => {
               return (
                 <div
                   className={`select-button${active ? ' active' : ''}`}
-                  onClick={() => handleSelect(value, onChange)}
+                  onClick={() => handleSelect(selected, value, onChange)}
                   key={`${name}_${value}`}
                 >
                   {label}

@@ -22,7 +22,7 @@ html, body, #root {
     padding: 5vw 5vw 50px;
 }
 
-.form {
+.formPage .form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -30,49 +30,33 @@ html, body, #root {
     flex: 1;
 }
 
-.form-group {
+.formPage .form-group {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 20px;
 }
 
-.form-group.inline {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.form-group.inline .label {
-    margin-bottom: 0;
-    margin-right: 5px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.label {
+.formPage .label {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 10px;
 }
-.error {
+
+.formPage .error {
     font-size: 12px;
-    margin-top: -10px;
+    margin-top: 10px;
     margin-bottom: 10px;
     color: crimson;
 }
 
-.hints {
+.formPage .hints {
     font-size: 12px;
     margin-top: -10px;
     margin-bottom: 10px;
 }
 
-input {
+.formPage input {
     border-top: 0;
     border-right: 0;
     border-left: 0;
@@ -85,59 +69,28 @@ input {
     color: #4a4a4a;
 }
 
-input.invalid {
+.formPage input.invalid {
     border-bottom-color: crimson;
 }
 
-.inline>input {
-    font-size: 16px !important;
-}
-
-.inline>input:not(:last-child) {
-    margin-right: 5px;
-}
-
-input:focus,
-input:hover,
-input:active {
+.formPage input:focus,
+.formPage input:hover,
+.formPage input:active {
     border-bottom-color: #4a4a4a;
     border-bottom-width: 4px;
     outline: none;
     font-weight: bolder;
-    font-size: 30px !important;
 }
 
-.inline>input:focus,
-.inline>input:hover,
-.inline>input:active {
-    font-size: 20px !important;
-}
-
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
+.formPage input:-webkit-autofill,
+.formPage input:-webkit-autofill:hover,
+.formPage input:-webkit-autofill:focus,
+.formPage input:-webkit-autofill:active {
     transition: background-color 5000s ease-in-out 0s;
     -webkit-text-fill-color: #4a4a4a !important;
 }
 
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-    font-size: 30px !important;
-}
-
-.inline>input:-webkit-autofill:hover,
-.inline>input:-webkit-autofill:focus,
-.inline>input:-webkit-autofill:active {
-    font-size: 20px !important;
-}
-
-.form-group{
-    margin-bottom: 20px;
-}
-
-.check-box {
+.formPage .check-box {
     padding: 10px;
     border: 1px solid #a4a4a4;
     border-radius: 10px;
@@ -147,17 +100,17 @@ input:-webkit-autofill:active {
     display: flex;
 }
 
-.check-box img {
+.formPage .check-box img {
     margin-right: 5px;
 }
 
-.check-box:active, .check-box.active {
+.formPage .check-box:active, .formPage .check-box.active {
     border: 2px solid cadetblue;
     color: cadetblue;
     font-weight: bold;
 }
 
-.carousel {
+.formPage .carousel {
     width: 100%;
     background: #fff6f1;
     border-radius: 50px;
@@ -167,14 +120,14 @@ input:-webkit-autofill:active {
     flex: 1;
 }
 
-.content {
+.formPage .content {
     display: flex;
     left: 0;
     transition: margin-left 300ms;
     height: 100%;
 }
 
-.page {
+.formPage .page {
     padding: 50px 5vw;
     flex: 0;
     display: flex;
@@ -232,15 +185,6 @@ input:-webkit-autofill:active {
 .remove-button {
     cursor: pointer;
     margin-left: 5px;
-}
-
-.workshop-group {
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.workshop-group>.form-group {
-    justify-content: space-between;
 }
 
 .select-button {
@@ -325,19 +269,6 @@ input:-webkit-autofill:active {
                                   supported by Chrome, Edge, Opera and Firefox */
 }
 
-.workshop-list {
-    margin-top: 10px;
-}
-
-.workshop-row {
-    display: flex;
-    margin-bottom: 10px;
-}
-
-.workshop-row>div{
-    flex: 1;
-}
-
 .loading {
     height: 30px;
 }
@@ -370,16 +301,4 @@ input:-webkit-autofill:active {
         -webkit-transform: rotate(0deg);
         transform:rotate(0deg);
     }
-}
-
-.qr-code-container {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    justify-content: center;
-}
-
-.id{
-    margin-top: 5px;
-    font-size: 10px;
 }
