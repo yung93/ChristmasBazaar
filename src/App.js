@@ -125,7 +125,7 @@ function App() {
       })
     });
     workshop += newWorkshop;
-    return emailjs.send('service_da2fco8', 'template_r9bzhjo', {
+    return emailjs.send('service_qbtwhvx', 'template_r9bzhjo', {
       to_name: info.name,
       dates: dates.map((day) => days[day]).join(', '),
       to_email: info.email,
