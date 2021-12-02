@@ -32,7 +32,7 @@ const belongsToOptions = [
   {label: '顯理老師', value: '顯理老師'},
   {label: '顯理學生家長', value: '顯理學生家長'},
   {label: '顯理福音堂', value: '顯理福音堂'},
-  {label: '其他教會', value: '其他教會'},
+  {label: '基址教會', value: '基址教會'},
   {label: '相熟親友', value: '相熟親友'},
 ]
 const churchOptions = [
@@ -40,7 +40,6 @@ const churchOptions = [
   {label: '好鄰舍福音堂', value: '好鄰舍福音堂'},
   {label: '赤柱福音堂', value: '赤柱福音堂'},
   {label: '石澳福音堂', value: '石澳福音堂'},
-  {label: '其他', value: '其他'}
 ]
 const days = {
   day1: 'Day 1: 12月25日 (六)',
@@ -51,6 +50,15 @@ const dateOptions = [
   {label: days.day1, value: 'day1'},　
   {label: days.day2, value: 'day2'},
 ]
+
+const workshopLabel = {
+  '沙畫': '堆沙成畫（沙畫）',
+  '籃球': '籃球體驗FUN練',
+  '咖啡': 'FUN住嘆咖啡',
+  '穿珠': '戒指穿珠製作FUN',
+  '滴膠耳環': '滴膠耳環',
+  '書法': '書法 ‧ 抒法',
+};
 
 function App() {
   const [width, setWidth] = useState(window.innerWidth * 0.9);
@@ -110,7 +118,7 @@ function App() {
     let newWorkshop = '';
     dates.forEach((day) => {
       if (Object.keys(timetable[day]).length > 0) {
-        newWorkshop += `<p style="text-align: center;">${days[day]}</p>`;
+        newWorkshop += `<p style="text-align: center; text-decoration: underline">${days[day]}</p>`;
       }
       Object.keys(timetable[day]).sort().forEach((time) => {
         newWorkshop += `<p style="text-align: center;">${time} ${Object.keys(timetable[day][time]).filter((key) => timetable[day][time][key]).join(', ')}</p>`;
@@ -164,6 +172,7 @@ function App() {
   }, [page]);
 
   const onSubmitWorkshop = useCallback(async(data) => {
+    if(loading) return;
     setLoading(true);
     const id = uuid();
     setId(id);
@@ -172,12 +181,14 @@ function App() {
       '登記日期': (new Date()).toLocaleString("en-US"),
       '姓名': info.name,
       '電話': info.phone,
+      '電郵': info.email,
       '所屬群體': info.belongsTo,
       '學生姓名': info.studentName,
       '教會名稱': info.churchName,
-      '其他教會名稱': info.otherChurch,
+      '教會介紹人': info.churchReferral,
       '親友姓名': info.acquaintanceName,
       '親友所屬群體': info.acquaintanceBelongsTo,
+      '親友所屬教會': info.acquaintanceChurchName,
       '接收資訊': info.promotion,
     };
 
@@ -194,28 +205,21 @@ function App() {
     const promises = dates.map(async (day) => {
       const sheet = doc.sheetsById[RESPONSE_TABLE[day]];
       const row = {...infoData, ...data[day], ...extraData};
-      try {
-        await sheet.loadHeaderRow()
-      }
-      catch {
-        await sheet.setHeaderRow(Object.keys(row));
-      } finally {
         return await sheet.addRow(row);
-      }
     });
     try {
       await Promise.all(promises);
+      await handleSendEmail(id);
     } catch (error) {
+      console.log(error);
       setError(error);
       setLoading(false);
     }
-    try {
-      await handleSendEmail(id);
-    } finally {
+    finally {
       handleNext();
       setLoading(false);
     }
-  }, [page, info, dates]);
+  }, [page, info, dates, loading]);
 
   const handleBack = useCallback(() => {
     setPage(page-1);
@@ -372,49 +376,81 @@ function App() {
                           }
                           <input id="acquaintanceName" name="acquaintanceName" type="text" {...register('acquaintanceName', {required: true, shouldUnregister: true})}/>
                         </div>
+                        {
+                          watch('acquaintanceBelongsTo') === '基址教會' &&
+                            <div className="form-group">
+                              <div className="label" htmlFor="acquaintanceChurchName">教會名稱</div>
+                              {
+                                errors.acquaintanceChurchName && <div className={'error'}>請選擇其中一項</div>
+                              }
+                              <Controller
+                                control={control}
+                                rules={{
+                                  required: (value) => {
+                                    return (!!value && value.length > 0)
+                                  }
+                                }}
+                                shouldUnregister
+                                name={'acquaintanceChurchName'}
+                                render={({field: { onChange }}) =>
+                                  <Input
+                                    type="select"
+                                    name="acquaintanceChurchName"
+                                    id="acquaintanceChurchName"
+                                    onChange={onChange}>
+                                    <option value={null} />
+                                    {
+                                      churchOptions.map((option) =>
+                                        <option value={option.value} key={`acquaintanceChurchName_${option.value}`}>{option.label}</option>
+                                      )
+                                    }
+                                  </Input>
+                                }
+                              />
+                            </div>
+                        }
                       </div>
                        :
-                      belongsTo === '其他教會' ?
-                        <div className="form-group">
-                          <div className="label" htmlFor="churchName">教會名稱</div>
-                          {
-                            errors.churchName && <div className={'error'}>請選擇其中一項</div>
-                          }
-                          <Controller
-                            control={control}
-                            rules={{
-                              required: (value) => {
-                                return (!!value && value.length > 0)
-                              }
-                            }}
-                            shouldUnregister
-                            name={'churchName'}
-                            render={({field: { onChange }}) =>
-                              <Input
-                                type="select"
-                                name="churchName"
-                                id="churchName"
-                                onChange={onChange}>
-                                <option value={null} />
-                                {
-                                  churchOptions.map((option) =>
-                                    <option value={option.value} key={`churchName_${option.value}`}>{option.label}</option>
-                                  )
-                                }
-                              </Input>
+                      belongsTo === '基址教會' ?
+                        <div>
+                          <div className="form-group">
+                            <div className="label" htmlFor="churchReferral">介紹人姓名</div>
+                            {
+                              errors.churchReferral && <div className={'error'}>請輸入介紹人姓名</div>
                             }
-                          />
+                            <input id="churchReferral" name="churchReferral" type="text" {...register('churchReferral', {required: true, shouldUnregister: true})}/>
+                          </div>
+                          <div className="form-group">
+                            <div className="label" htmlFor="churchName">教會名稱</div>
+                            {
+                              errors.churchName && <div className={'error'}>請選擇其中一項</div>
+                            }
+                            <Controller
+                              control={control}
+                              rules={{
+                                required: (value) => {
+                                  return (!!value && value.length > 0)
+                                }
+                              }}
+                              shouldUnregister
+                              name={'churchName'}
+                              render={({field: { onChange }}) =>
+                                <Input
+                                  type="select"
+                                  name="churchName"
+                                  id="churchName"
+                                  onChange={onChange}>
+                                  <option value={null} />
+                                  {
+                                    churchOptions.map((option) =>
+                                      <option value={option.value} key={`churchName_${option.value}`}>{option.label}</option>
+                                    )
+                                  }
+                                </Input>
+                              }
+                            />
+                          </div>
                         </div> : null
-                }
-                {
-                  watch('churchName') === '其他' &&
-                    <div className="form-group">
-                      <div className="label" htmlFor="otherChurch">教會名稱</div>
-                      {
-                        errors.otherChurch && <div className={'error'}>請輸入教會名稱</div>
-                      }
-                      <input id="otherChurch" name="otherChurch" type="text" {...register('otherChurch', {required: true, shouldUnregister: true})}/>
-                    </div>
                 }
                 <div className="form-group">
                   <Controller
@@ -445,7 +481,7 @@ function App() {
                           return (
                             <div className={'workshop-group'} key={`workshop_${date}_${workshopName}`}>
                               <div className={'form-group inline'}>
-                                <div className={'label'}>{workshopName}</div>
+                                <div className={'label'}>{workshopLabel[workshopName]}</div>
                               </div>
                               <div>
                                 {
@@ -523,7 +559,7 @@ function App() {
             <Button className="bottom-button noselect" size={'lg'} color={'primary'} onClick={handleBack} outline><img src={BackIcon} /></Button>
             {
               page === pages.length - 2 ?
-                <Button key="submitButton" className="bottom-button" form={`workshopForm`} type={'submit'} size={'lg'} color={'primary'} disabled={loading}>
+                <Button key="submitButton" className="bottom-button" form={`workshopForm`} type={loading ? 'button' : 'submit'} size={'lg'} color={'primary'} disabled={loading}>
                   {
                     loading ?
                       <div><img className={'loading spinner'} src={BellIcon} /></div> :
