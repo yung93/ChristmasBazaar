@@ -3,7 +3,7 @@ import {Controller} from 'react-hook-form';
 import {useState, useCallback} from "react";
 
 const Selector = (props) => {
-  const {options, control, name, multiple, onSelect, required, full} = props;
+  const {options, control, name, multiple, onSelect, required, full, defaultValue} = props;
 
   const handleSelect = useCallback((selected, selectedValue, onChange) => {
     let temp = multiple ? [...selected] : [];
@@ -20,6 +20,7 @@ const Selector = (props) => {
     <Controller
       control={control}
       name={name}
+      defaultValue={defaultValue}
       render={({
                  field: { onChange, onBlur, value: selected, name, ref },
                  fieldState: { invalid, isTouched, isDirty, error },
@@ -31,11 +32,11 @@ const Selector = (props) => {
         >
           {
             options.map(({label, value}) => {
-              const active = selected.includes(value);
+              const active = selected && selected.includes(value);
               return (
                 <div
                   className={`select-button${active ? ' active' : ''}`}
-                  onClick={() => handleSelect(selected, value, onChange)}
+                  onClick={() => handleSelect(selected || [], value, onChange)}
                   key={`${name}_${value}`}
                 >
                   {label}

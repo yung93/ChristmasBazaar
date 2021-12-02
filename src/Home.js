@@ -117,7 +117,7 @@ function App() {
         <div className={'page'}>
           <form id="idForm" className="form" onSubmit={handleSubmit(onSubmit)}>
             <div className="form-group">
-              <Selector control={control} name={'date'} options={dateOptions} requird />
+              <Selector control={control} name={'date'} options={dateOptions} required />
               {
                 errors.date && <div className={'error'}>請選擇日期</div>
               }
