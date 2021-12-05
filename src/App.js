@@ -294,6 +294,7 @@ function App() {
                 </div>
                 <div className="form-group">
                   <div className="label" htmlFor="email">電郵地址</div>
+                  <div className={'hints'}>入場QR code 將以電郵方式確認</div>
                   {
                     errors.email && <div className={'error'}>請輸入有效電郵地址</div>
                   }
