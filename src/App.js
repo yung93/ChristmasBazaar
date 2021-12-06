@@ -296,9 +296,9 @@ function App() {
                   <div className="label" htmlFor="email">電郵地址</div>
                   <div className={'hints'}>入場QR code 將以電郵方式確認</div>
                   {
-                    errors.email && <div className={'error'}>請輸入有效電郵地址</div>
+                    errors.email && <div className={'error'}>{errors.email.message}</div>
                   }
-                  <input id="email" name="email" type="email" {...register('email', {required: true, pattern: /^\S+@\S+$/i})}/>
+                  <input id="email" name="email" type="email" {...register('email', {required: '請輸入有效電郵地址', pattern: { value: /^\S+@\S+$/i, message: '請輸入有效電郵地址' }, validate: { hssEmail: v => !(/@gc\.henrietta\.edu\.hk$/i).test(v) || '校內電郵地址未能接收外部電郵，請使用其他電郵地址' }})}/>
                 </div>
                 <div className="form-group">
                   <div className="label" htmlFor="belongsTo">屬於哪個群體？</div>
