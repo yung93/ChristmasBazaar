@@ -32,6 +32,8 @@ const answerOptions = [
   {label: '否 No', value: false},
 ];
 
+const infoHeaders = ['接收資訊', '已填寫健康申報'];
+
 function Form(props) {
   const carouselRef = useRef(null);
   const [width, setWidth] = useState(window.innerWidth * 0.9);
@@ -40,6 +42,7 @@ function Form(props) {
   const [loading, setLoading] = useState(false);
   const [row, setRow] = useState({});
   const [status, setStatus] = useState('fetching');
+  const [appliedWorkshop, setAppliedWorkshop] = useState([]);
 
   const { handleSubmit, control, getValues, register, unregister, formState: {errors}, watch, reset } = useForm();
   const location = useLocation();
@@ -60,13 +63,16 @@ function Form(props) {
     });
     await doc.loadInfo();
     const sheet = doc.sheetsById[RESPONSE_TABLE[date]];
-    const rows = await sheet.getRows({limit: 200});
+    const rows = await sheet.getRows({limit: 300});
+
     const hash = new Map();
     rows.forEach((row) => hash.set(row.id, row));
     const row = hash.get(id);
     if (!row) {
       setStatus('notFound');
     } else {
+      const workshopHeaders = Object.keys(row).filter((header) => !infoHeaders.includes(header) && (row[header] === 'TRUE' || row[header] === 'DUPLICATED'));
+      setAppliedWorkshop(workshopHeaders);
       setRow(row)
       setStatus('done');
     }
@@ -89,6 +95,8 @@ function Form(props) {
     row['已填寫健康申報'] = true;
     row['出席日期'] = (new Date()).toLocaleString("en-US");
     await row.save();
+
+
     setPage(page+1);
   }, [row, page]);
 
@@ -228,6 +236,15 @@ function Form(props) {
                   {/*Page summary*/}
                   <div className={'page'} style={{ minWidth: width }}>
                     <div className={'label'}>{`多謝參與`}</div>
+                    {
+                      appliedWorkshop.length > 0 &&
+                        <div>你已報名的是日工作坊包括：</div>
+                    }
+                    {
+                      appliedWorkshop.map((workshop, index) =>
+                        <div className={'header2'} key={`applied_workshop_${index}`}>{workshop}</div>
+                      )
+                    }
                   </div>
                 </div>
           }

@@ -109,7 +109,7 @@ function App() {
       clearErrors();
       setValue('id', data);
     }
-  }, [reset, setValue]);
+  }, [clearErrors, setValue]);
 
   return (
     <div className="app home">
