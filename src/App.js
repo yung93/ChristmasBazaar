@@ -478,6 +478,8 @@ function App() {
                       <div className={'label'}>{`工作坊報名(${date === 'day2' ? 'Day 2' : 'Day 1'})`}</div>
                       <div className={'hints'}>請選擇有興趣參與的工作坊</div>
                       {
+                        Object.keys(workshopOptions[date]).length <= 0 ?
+                        <div>網上報名已截止，請留意場內資訊。</div> :
                         Object.keys(workshopOptions[date]).map((workshopName) => {
                           return (
                             <div className={'workshop-group'} key={`workshop_${date}_${workshopName}`}>
