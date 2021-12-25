@@ -34,6 +34,7 @@ const belongsToOptions = [
   {label: '顯理福音堂', value: '顯理福音堂'},
   {label: '基址教會', value: '基址教會'},
   {label: '相熟親友', value: '相熟親友'},
+  {label: '街坊', value: '街坊'},
 ]
 const churchOptions = [
   {label: '香港浸信教會', value: '香港浸信教會'},
