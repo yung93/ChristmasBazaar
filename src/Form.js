@@ -63,7 +63,7 @@ function Form(props) {
     });
     await doc.loadInfo();
     const sheet = doc.sheetsById[RESPONSE_TABLE[date]];
-    const rows = await sheet.getRows({limit: 300});
+    const rows = await sheet.getRows({limit: 350});
 
     const hash = new Map();
     rows.forEach((row) => hash.set(row.id, row));
