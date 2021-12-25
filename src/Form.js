@@ -43,6 +43,7 @@ function Form(props) {
   const [row, setRow] = useState({});
   const [status, setStatus] = useState('fetching');
   const [appliedWorkshop, setAppliedWorkshop] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { handleSubmit, control, getValues, register, unregister, formState: {errors}, watch, reset } = useForm();
   const location = useLocation();
@@ -80,6 +81,7 @@ function Form(props) {
 
 
   const onSubmit = useCallback(async (data) => {
+    setLoading(true);
     const {declare, otherSymptoms, ...answers} = data;
     let yes = false;
     Object.keys(answers).forEach((key) => {
@@ -91,12 +93,10 @@ function Form(props) {
       window.alert('健康申報表未能提交，請聯絡工作人員。');
       return;
     }
-
     row['已填寫健康申報'] = true;
     row['出席日期'] = (new Date()).toLocaleString("en-US");
     await row.save();
-
-
+    setLoading(false);
     setPage(page+1);
   }, [row, page]);
 
